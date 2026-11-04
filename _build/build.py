@@ -322,29 +322,22 @@ def cta_band():
 </section>"""
 
 
-def contact_card():
-    return f"""<aside class="hero-card" aria-label="{L("Contact details", "聯絡資料")}">
-      <p class="hero-card-h">{icon("lang")} {L("Talk to us in", "可用語言")} <span lang="en">English</span> · <span lang="zh-Hant-HK">廣東話</span> · <span lang="zh-Hant">普通話</span></p>
-      <ul class="hero-contacts">
-        <li><a href="{TEL}"><span class="ic-wrap">{icon("phone")}</span><span><small>{L("Telephone", "電話")}</small><strong>{PHONE}</strong></span></a></li>
-        <li><a href="{WA}" target="_blank" rel="noopener"><span class="ic-wrap wa">{icon("chat")}</span><span><small>WhatsApp</small><strong>{WHATSAPP}</strong></span></a></li>
-        <li><a href="mailto:{EMAIL}"><span class="ic-wrap">{icon("mail")}</span><span><small>{L("Email", "電郵")}</small><strong>{EMAIL}</strong></span></a></li>
-        <li><a href="{MAPS}" target="_blank" rel="noopener"><span class="ic-wrap">{icon("pin")}</span><span><small>{L("Office", "辦公室")}</small><strong>{L("Sheraton Skyline Hotel, Heathrow", "希斯路 Sheraton Skyline 酒店")}</strong></span></a></li>
-      </ul>
-      <p class="hero-card-foot">{icon("shield")} {L(f"SRA-regulated · SRA No. {SRA_NO}", f"受 SRA 監管 · 編號 {SRA_NO}")}</p>
-    </aside>"""
-
-
 # ---------------------------------------------------------------- pages
+def photo(name, alt, cls="", sizes="(max-width: 900px) 100vw, 50vw", eager=False):
+    load = 'fetchpriority="high"' if eager else 'loading="lazy"'
+    return (f'<img class="{cls}" src="{asset(f"assets/img/{name}-1600.webp")}" '
+            f'srcset="{asset(f"assets/img/{name}-900.webp")} 900w, {asset(f"assets/img/{name}-1600.webp")} 1600w" '
+            f'sizes="{sizes}" alt="{alt}" {load} decoding="async">')
+
+
 def home():
-    tiles = "\n".join(
-        f"""<a class="area reveal" href="services.html#{slug}">
-        <span class="area-ic">{icon(ic)}</span>
-        <h3>{name}</h3>
-        <p>{summary}</p>
-        <span class="area-price">{price}</span>
-        <span class="area-more">{L("Learn more", "了解更多")} {icon("arrow")}</span>
-      </a>""" for slug, ic, name, summary, items, price, _ in areas())
+    rows = "\n".join(
+        f"""<li class="reveal"><a href="services.html#{slug}">
+          <span class="row-n">{i:02d}</span>
+          <span class="row-main"><span class="row-title">{name}</span><span class="row-sum">{summary}</span></span>
+          <span class="row-price">{price}</span>
+          <span class="row-go">{icon("arrow")}</span>
+        </a></li>""" for i, (slug, ic, name, summary, items, price, _) in enumerate(areas(), 1))
 
     glance = [
         (L("Initial consultation (30 minutes)", "初步諮詢（30 分鐘）"), L("Free", "免費")),
@@ -360,81 +353,93 @@ def home():
         (L("Free first conversation", "免費初步諮詢"),
          L("30 minutes to understand your situation and tell you plainly what the options are.", "用 30 分鐘了解你的情況，清楚說明可行方案。")),
         (L("A fixed fee, in writing", "書面確認定額收費"),
-         L("Most of our work is fixed fee. We confirm the price and what it covers in an engagement letter before we start.", "大部分服務以定額收費。開始前會以委託書列明價錢及包括的工作。")),
+         L("Most work is fixed fee, confirmed in an engagement letter before we start.", "大部分服務定額收費，開始前以委託書列明。")),
         (L("We prepare and handle it", "由我們準備及處理"),
-         L("We gather the evidence, prepare the documents and deal with the Home Office, court or other side for you.", "我們整理證明文件、準備申請，並代你與內政部、法院或對方交涉。")),
+         L("Evidence, documents, and dealing with the Home Office, court or other side.", "整理證明文件、準備申請，並代你與內政部、法院或對方交涉。")),
         (L("Updates at every stage", "每個階段都有更新"),
-         L("You hear from us in English or Chinese as things move, so there are no surprises.", "進度有變我們會以中文或英文通知你，不會有意外。")),
+         L("In English or Chinese, as things move.", "進度有變，以中文或英文通知你。")),
     ]
-    step_html = "".join(f'<li class="reveal"><span class="step-n">{i}</span><h3>{t}</h3><p>{d}</p></li>' for i, (t, d) in enumerate(steps, 1))
+    step_html = "".join(f'<li class="reveal"><span class="tl-n">{i:02d}</span><h3>{t}</h3><p>{d}</p></li>' for i, (t, d) in enumerate(steps, 1))
 
     body = f"""
 <section class="hero">
   <div class="container hero-grid">
     <div class="hero-copy">
       <p class="eyebrow">{L("SRA-regulated solicitors · Est. 2016", "受 SRA 監管律師行 · 2016 年成立")}</p>
-      <h1>{L("Bilingual solicitors, <em>minutes from Heathrow.</em>", "中英雙語律師，<em>就在希斯路機場旁。</em>")}</h1>
-      <p class="lede">{L("Chu &amp; Company helps individuals, families and businesses with immigration, disputes, company matters, property and documents, and explains every step clearly in English, Cantonese or Mandarin.",
-                       "Chu &amp; Company 為個人、家庭及企業處理移民、民事訴訟、公司、物業及文件事務，並以英語、廣東話或普通話清楚解釋每一步。")}</p>
+      <h1>{L("Bilingual solicitors, <em>minutes from Heathrow.</em>", "中英雙語律師，<br><em>就在希斯路機場旁。</em>")}</h1>
+      <p class="lede">{L("Immigration, disputes, business, property and documents, for individuals, families and companies, explained clearly in English, Cantonese or Mandarin.",
+                       "移民、訴訟、企業、物業及文件事務，服務個人、家庭及公司，以英語、廣東話或普通話清楚解釋。")}</p>
       <div class="hero-actions">
         <a class="btn btn-primary btn-lg" href="contact.html#enquiry">{L("Book a free consultation", "預約免費諮詢")} {icon("arrow")}</a>
-        <a class="btn btn-ghost btn-lg" href="services.html">{L("Our services", "服務範圍")}</a>
+        <a class="btn btn-ghost btn-lg" href="{WA}" target="_blank" rel="noopener">{icon("chat")} WhatsApp</a>
       </div>
-      <ul class="hero-points">
-        <li>{icon("check")} {L("30-minute first consultation, free", "首 30 分鐘諮詢免費")}</li>
-        <li>{icon("check")} {L("Fixed fees for most work", "大部分服務定額收費")}</li>
-        <li>{icon("check")} {L("We can meet at your office or home", "可到你的辦公室或府上會面")}</li>
-      </ul>
     </div>
-    {contact_card()}
+    <figure class="hero-media">
+      {photo("hero-wing", L("View from an aircraft window above the clouds at sunrise", "日出時從飛機窗外看到雲層上的機翼"), "", "(max-width: 900px) 100vw, 46vw", eager=True)}
+      <div class="hero-langs" aria-label="{L("Languages we speak", "可用語言")}">
+        <small>{L("We speak", "我們說")}</small>
+        <span lang="en">English</span><span lang="zh-Hant-HK">廣東話</span><span lang="zh-Hant">普通話</span>
+      </div>
+      <figcaption>{icon("pin")} Sheraton Skyline Hotel · Bath Road, Heathrow</figcaption>
+    </figure>
+  </div>
+  <div class="container">
+    <ul class="hero-strip">
+      <li><a href="{TEL}">{icon("phone")}<span><small>{L("Call", "致電")}</small>{PHONE}</span></a></li>
+      <li><a href="{WA}" target="_blank" rel="noopener">{icon("chat")}<span><small>WhatsApp</small>{WHATSAPP}</span></a></li>
+      <li><a href="mailto:{EMAIL}">{icon("mail")}<span><small>{L("Email", "電郵")}</small>{EMAIL}</span></a></li>
+      <li><span class="strip-static">{icon("shield")}<span><small>{L("Regulated", "監管")}</small>SRA No. {SRA_NO}</span></span></li>
+    </ul>
   </div>
 </section>
 
 <section class="section" id="services">
-  <div class="container">
-    <div class="section-head">
-      <div>
-        <p class="eyebrow">{L("What we do", "服務範圍")}</p>
-        <h2>{L("Six areas of law, one team that speaks your language.", "六大法律範疇，一支說你語言的團隊。")}</h2>
-      </div>
+  <div class="container services-split">
+    <div class="services-intro">
+      <p class="eyebrow">{L("What we do", "服務範圍")}</p>
+      <h2>{L("Six areas of law. One team that speaks your language.", "六大法律範疇，<br>一支說你語言的團隊。")}</h2>
+      <p>{L("Start with a free 30-minute conversation. Most of our work is then done for a fixed fee, agreed in writing.", "先來一次 30 分鐘免費諮詢。之後大部分工作以定額收費，並以書面確認。")}</p>
       <a class="text-link" href="services.html">{L("All services", "全部服務")} {icon("arrow")}</a>
     </div>
-    <div class="area-grid">
-      {tiles}
-    </div>
+    <ol class="area-rows">
+      {rows}
+    </ol>
   </div>
 </section>
 
-<section class="section bno-band on-dark">
-  <div class="container bno-grid">
-    <div class="reveal">
-      <p class="eyebrow">{L("Moving from Hong Kong", "由香港移居英國")}</p>
-      <h2>{L("BN(O) visa applications for the whole family.", "全家一起申請 BN(O) 簽證。")}</h2>
-      <p>{L("The BN(O) route lets British National (Overseas) status holders and their families live, work and study in the UK, and leads to settlement after five years. We check eligibility for every family member, work out the financial requirement and put the evidence together with you.",
-            "BN(O) 簽證讓英國國民（海外）身份持有人及其家人在英國居住、工作及讀書，五年後可申請永久居留。我們會逐一核實每位家庭成員的資格，計算資金要求，並與你一起整理證明文件。")}</p>
-      <div class="hero-actions">
-        <a class="btn btn-light" href="bno-visa.html">{L("BN(O) visa guide", "BN(O) 簽證指南")} {icon("arrow")}</a>
-        <a class="btn btn-outline-light" href="contact.html?matter=immigration#enquiry">{L("Ask about your case", "查詢你的個案")}</a>
-      </div>
-    </div>
-    <dl class="facts reveal">
+<section class="bno-band on-dark">
+  <div class="bno-photo">{photo("hong-kong", L("Hong Kong harbour and skyline at dusk, seen from the Peak", "黃昏時從山頂眺望香港維港及天際線"), "", "(max-width: 900px) 100vw, 50vw")}</div>
+  <div class="bno-copy">
+    <p class="eyebrow">{L("Moving from Hong Kong", "由香港移居英國")}</p>
+    <h2>{L("BN(O) visas for the whole family.", "全家一起申請 BN(O) 簽證。")}</h2>
+    <p>{L("We check eligibility for every family member, work out the financial requirement and put the evidence together with you, in Cantonese if you prefer.",
+          "我們逐一核實每位家庭成員的資格，計算資金要求，並與你一起整理證明文件，全程可用廣東話溝通。")}</p>
+    <dl class="facts">
       <div><dt>{L("Visa length", "簽證年期")}</dt><dd>{L("30 months or 5 years", "30 個月或 5 年")}</dd></div>
-      <div><dt>{L("Settlement", "永久居留")}</dt><dd>{L("After 5 years in the UK", "在英國住滿 5 年後")}</dd></div>
-      <div><dt>{L("Who can come", "可同行家人")}</dt><dd>{L("Partner, children, born-after-1997 adult children, dependent relatives", "伴侶、子女、1997 年後出生的成年子女及受供養親屬")}</dd></div>
+      <div><dt>{L("Settlement", "永久居留")}</dt><dd>{L("After 5 years", "住滿 5 年後")}</dd></div>
       <div><dt>{L("Our fixed fee", "本行定額收費")}</dt><dd>£1,000 – £2,000 <small>+ VAT</small></dd></div>
     </dl>
+    <div class="hero-actions">
+      <a class="btn btn-light" href="bno-visa.html">{L("Read the BN(O) guide", "閱讀 BN(O) 簽證指南")} {icon("arrow")}</a>
+      <a class="btn btn-outline-light" href="contact.html?matter=immigration#enquiry">{L("Ask about your case", "查詢你的個案")}</a>
+    </div>
   </div>
 </section>
 
-<section class="section">
-  <div class="container how-grid">
-    <div>
+<section class="statement">
+  <div class="container">
+    <p class="statement-q reveal">{L("“No expectation gaps or nasty surprises under our watch.”", "「在我們的照顧下，不會有期望落差，也不會有意外。」")}</p>
+    <p class="statement-by">Chu &amp; Company</p>
+  </div>
+</section>
+
+<section class="section how">
+  <div class="container">
+    <div class="how-head">
       <p class="eyebrow">{L("How we work", "工作方式")}</p>
-      <h2>{L("Clear advice, a clear price, no nasty surprises.", "清楚的意見、清楚的價錢、沒有意外。")}</h2>
-      <p class="lede">{L("Every case is handled with care, because a small detail can make a critical difference. We listen first, then give you a strategy that is in your best interests.",
-                       "每個個案我們都細心處理，因為一個小細節也可能影響結果。我們先聆聽，再為你度身訂造最符合你利益的方案。")}</p>
+      <h2>{L("Clear advice and a clear price, from the first call.", "由第一通電話開始，意見清楚，價錢清楚。")}</h2>
     </div>
-    <ol class="steps">{step_html}</ol>
+    <ol class="timeline">{step_html}</ol>
   </div>
 </section>
 
@@ -443,28 +448,28 @@ def home():
     <div>
       <p class="eyebrow">{L("Fees", "收費")}</p>
       <h2>{L("Prices you can see before you call.", "未致電已經知道價錢。")}</h2>
-      <p>{L("Most of our services are fixed fee. These are common examples; the full list, hourly rates and what each fee includes are on our fees page.",
-            "大部分服務以定額收費。以下是常見例子；完整收費、時薪及包括的工作，請參閱收費頁。")}</p>
+      <p>{L("These are common examples. The full list, hourly rates and what each fee includes are on our fees page.",
+            "以下是常見例子。完整收費、時薪及包括的工作，請參閱收費頁。")}</p>
       <a class="text-link" href="fees.html">{L("See all fees", "查看全部收費")} {icon("arrow")}</a>
     </div>
     <ul class="glance reveal">{glance_rows}</ul>
   </div>
 </section>
 
-<section class="section">
+<section class="visit">
   <div class="container visit-grid">
-    <div class="visit-art reveal" aria-hidden="true">{visit_svg()}</div>
-    <div>
+    <div class="visit-copy">
       <p class="eyebrow">{L("Visit us", "到訪本行")}</p>
-      <h2>{L("At the Sheraton Skyline, on the Bath Road.", "位於 Bath Road 的 Sheraton Skyline 酒店內。")}</h2>
-      <p>{L("Our office is inside the Sheraton Skyline Hotel at London Heathrow, which makes it easy to see us on the way to or from a flight. If it suits you better, we can also come to you: your office, your home or a private members’ club.",
-            "本行位於倫敦希斯路機場的 Sheraton Skyline 酒店內，出入境前後順道來訪十分方便。如你較方便，我們亦可到你的辦公室、府上或私人會所會面。")}</p>
+      <h2>{L("On the Bath Road, at the edge of the airport.", "位於 Bath Road，就在機場旁。")}</h2>
+      <p>{L("Our office is inside the Sheraton Skyline Hotel at London Heathrow, easy to reach on the way to or from a flight. We can also come to you: your office, your home or a private members’ club.",
+            "本行位於倫敦希斯路機場的 Sheraton Skyline 酒店內，出入境前後順道來訪十分方便。我們亦可到你的辦公室、府上或私人會所會面。")}</p>
       <address class="visit-address">{"<br>".join(ADDRESS_LINES)}</address>
       <div class="hero-actions">
         <a class="btn btn-primary" href="{MAPS}" target="_blank" rel="noopener">{icon("map")} {L("Get directions", "路線指引")}</a>
         <a class="btn btn-ghost" href="contact.html">{L("All contact details", "全部聯絡資料")}</a>
       </div>
     </div>
+    <div class="visit-photo reveal">{photo("terminal", L("An aircraft parked at an airport terminal", "停泊在機場客運大樓旁的飛機"))}</div>
   </div>
 </section>
 {cta_band()}
@@ -475,32 +480,6 @@ def home():
                   L("SRA-regulated English, Cantonese and Mandarin-speaking solicitors at London Heathrow: immigration and BN(O) visas, litigation, corporate, property, criminal law and document certification.",
                     "倫敦希斯路受 SRA 監管的中英雙語律師行，以英語、廣東話及普通話處理移民及 BN(O) 簽證、民事訴訟、企業商業、物業、刑事及文件公證。"),
                   body)
-
-
-def visit_svg():
-    return """<svg viewBox="0 0 560 420" role="img">
-  <rect width="560" height="420" rx="18" fill="#e7eff7"/>
-  <path d="M0 300 L560 250" stroke="#ffffff" stroke-width="30"/>
-  <path d="M0 300 L560 250" stroke="#c9d9ea" stroke-width="2" stroke-dasharray="12 10"/>
-  <text x="440" y="236" font-family="Instrument Sans, sans-serif" font-size="12" font-weight="600" letter-spacing=".12em" fill="#5d7088" transform="rotate(-5 440 236)">BATH ROAD · A4</text>
-  <g fill="#d6e4f1"><rect x="40" y="40" width="130" height="90" rx="6"/><rect x="390" y="40" width="130" height="120" rx="6"/><rect x="60" y="330" width="170" height="60" rx="6"/><rect x="320" y="320" width="200" height="70" rx="6"/></g>
-  <g transform="translate(205 120)">
-    <rect width="150" height="150" rx="6" fill="#002e5d"/>
-    <g fill="#9cc5ea" opacity=".75">
-      <rect x="18" y="20" width="22" height="14" rx="2"/><rect x="50" y="20" width="22" height="14" rx="2"/><rect x="82" y="20" width="22" height="14" rx="2"/><rect x="114" y="20" width="18" height="14" rx="2"/>
-      <rect x="18" y="46" width="22" height="14" rx="2"/><rect x="50" y="46" width="22" height="14" rx="2"/><rect x="82" y="46" width="22" height="14" rx="2"/><rect x="114" y="46" width="18" height="14" rx="2"/>
-      <rect x="18" y="72" width="22" height="14" rx="2"/><rect x="50" y="72" width="22" height="14" rx="2"/><rect x="82" y="72" width="22" height="14" rx="2"/><rect x="114" y="72" width="18" height="14" rx="2"/>
-    </g>
-    <rect x="56" y="104" width="38" height="46" rx="3" fill="#cfe1f2"/>
-  </g>
-  <g transform="translate(280 96)">
-    <path d="M0 22s-17-15-17-28a17 17 0 0 1 34 0C17 7 0 22 0 22z" fill="#d1553b"/>
-    <circle cy="-6" r="6.5" fill="#fff"/>
-  </g>
-  <g transform="translate(470 330) rotate(-35)" fill="#002e5d" opacity=".9">
-    <path d="M40 9 24 0V-14a3 3 0 0 0-6 0V0L2 9v5l16-5v9l-5 3v3l8-2 8 2v-3l-5-3v-9l16 5z" transform="scale(1.4)"/>
-  </g>
-</svg>"""
 
 
 def services():
@@ -625,6 +604,8 @@ def bno():
                      L("The BN(O) route lets British National (Overseas) status holders and their immediate family from Hong Kong live, work and study in the UK, and leads to settlement. Here is what you need to know, and how we can help.",
                        "BN(O) 簽證讓英國國民（海外）身份持有人及其直系家人由香港移居英國，在英國居住、工作及讀書，並可申請永久居留。以下是你需要知道的重點，以及我們可以如何協助。"),
                      f'<nav class="jump" aria-label="{L("On this page", "本頁內容")}">{toc_html}</nav>')
+    body = body.replace('<section class="page-head">', '<section class="page-head page-head-photo">', 1).replace(
+        '<div class="container">', f'<div class="page-head-img">{photo("hong-kong", "", "", "50vw")}</div>\n  <div class="container">', 1)
     body += f"""
 <section class="section">
   <div class="container article-grid">
@@ -933,7 +914,7 @@ def contact():
         <li><span class="ic-wrap">{icon("mail")}</span><div><small>{L("Email", "電郵")}</small><a href="mailto:{EMAIL}"><strong>{EMAIL}</strong></a><p>{L("Fax", "傳真")}: {FAX}</p></div></li>
         <li><span class="ic-wrap">{icon("pin")}</span><div><small>{L("Office", "辦公室")}</small><strong>{", ".join(ADDRESS_LINES)}</strong><p><a href="{MAPS}" target="_blank" rel="noopener">{L("Open in Google Maps", "在 Google 地圖開啟")}</a> · {L("We can also meet at your office or home.", "亦可到你的辦公室或府上會面。")}</p></div></li>
       </ul>
-      <div class="visit-art small-art" aria-hidden="true">{visit_svg()}</div>
+      <div class="visit-photo small-photo">{photo("terminal", L("An aircraft parked at an airport terminal", "停泊在機場客運大樓旁的飛機"))}</div>
     </div>
     <form class="form" id="enquiry-form" novalidate data-email="{EMAIL}">
       <h2 id="enquiry">{L("Book a free consultation", "預約免費諮詢")}</h2>
