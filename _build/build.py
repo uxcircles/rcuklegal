@@ -134,7 +134,7 @@ def layout(page, title, description, body):
 <div class="concept-bar" role="note">
   <div class="container concept-inner">
     <p><span class="concept-tag">Concept</span><span class="concept-long">{L(f'Concept redesign. Not the <a href="{OFFICIAL}" target="_blank" rel="noopener">official Chu &amp; Company website</a>.', f'改版概念設計，並非 <a href="{OFFICIAL}" target="_blank" rel="noopener">Chu &amp; Company 官方網站</a>。')}</span></p>
-    <a href="https://ux-circles.com/web" target="_blank" rel="noopener"><span class="concept-by">{L("Designed by ", "設計：")}</span><strong>UX CIRCLES</strong> {icon("ext", "ic-ext")}</a>
+    <a href="https://ux-circles.com/professionals" target="_blank" rel="noopener"><span class="concept-by">{L("Designed by ", "設計：")}</span><strong>UX CIRCLES</strong> {icon("ext", "ic-ext")}</a>
   </div>
 </div>
 <header class="site-header">
@@ -193,7 +193,7 @@ def layout(page, title, description, body):
     <div class="footer-legal">
       <p>{L(f'Chu &amp; Company is authorised and regulated by the Solicitors Regulation Authority, SRA No. {SRA_NO}. <a href="{SRA_REGISTER}" target="_blank" rel="noopener">Check the SRA register</a>.',
             f'Chu &amp; Company 由英格蘭及威爾斯律師監管局（SRA）授權及監管，SRA 編號 {SRA_NO}。<a href="{SRA_REGISTER}" target="_blank" rel="noopener">查閱 SRA 登記冊</a>。')}</p>
-      <p>&copy; Chu &amp; Company. {L("Concept redesign by", "改版概念設計：")} <a href="https://ux-circles.com/web" target="_blank" rel="noopener">UX CIRCLES</a>.</p>
+      <p>&copy; Chu &amp; Company. {L("Concept redesign by", "改版概念設計：")} <a href="https://ux-circles.com/professionals" target="_blank" rel="noopener">UX CIRCLES</a>.</p>
     </div>
   </div>
 </footer>

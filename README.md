@@ -2,7 +2,7 @@
 
 A redesign of [Chu & Company Solicitors](https://www.rcuklegal.co.uk/), an SRA-regulated English and Chinese-speaking firm at the Sheraton Skyline Hotel, London Heathrow. It is plain static HTML, CSS and JS and deploys to any static host.
 
-> **Concept only.** This redesign was made by [UX CIRCLES](https://ux-circles.com/web). It is not the official Chu & Company website.
+> **Concept only.** This redesign was made by [UX CIRCLES](https://ux-circles.com/professionals). It is not the official Chu & Company website.
 > Every page opens with a "Concept" bar, is marked `noindex`, and `robots.txt` blocks crawlers so the concept doesn't compete with the official site in search results.
 > If the firm adopts it, remove the `.concept-bar` block and the `noindex` meta tag in `_build/build.py`, rebuild, and set `robots.txt` to `Allow: /`.
 
