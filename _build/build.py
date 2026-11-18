@@ -193,7 +193,7 @@ def layout(page, title, description, body):
     <div class="footer-legal">
       <p>{L(f'Chu &amp; Company is authorised and regulated by the Solicitors Regulation Authority, SRA No. {SRA_NO}. <a href="{SRA_REGISTER}" target="_blank" rel="noopener">Check the SRA register</a>.',
             f'Chu &amp; Company 由英格蘭及威爾斯律師監管局（SRA）授權及監管，SRA 編號 {SRA_NO}。<a href="{SRA_REGISTER}" target="_blank" rel="noopener">查閱 SRA 登記冊</a>。')}</p>
-      <p>&copy; Chu &amp; Company. {L("Concept redesign by", "改版概念設計：")} <a href="https://ux-circles.com/professionals" target="_blank" rel="noopener">UX CIRCLES</a>.</p>
+      <p>&copy; Chu &amp; Company. {L("Unofficial redesign concept by ", "非官方概念設計：")}<a href="https://ux-circles.com/professionals" target="_blank" rel="noopener">UX CIRCLES</a></p>
     </div>
   </div>
 </footer>
